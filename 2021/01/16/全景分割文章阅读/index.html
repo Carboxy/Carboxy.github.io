@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于全景分割的文章阅读笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="全景分割文章阅读">
+<meta property="og:url" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于全景分割的文章阅读笔记。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116102638957.png">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116102658071.png">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210115161633749.png">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116115931707.png">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/BM.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss2.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss3.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss4.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/ID.PNG">
+<meta property="og:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/CL.PNG">
+<meta property="article:published_time" content="2021-01-16T08:28:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T11:06:27.162Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="全景分割">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116102638957.png">
+
+<link rel="canonical" href="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>全景分割文章阅读 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          全景分割文章阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-16 16:28:00 / Modified: 19:06:27" itemprop="dateCreated datePublished" datetime="2021-01-16T16:28:00+08:00">2021-01-16</time>
+            </span>
+
+          
+            <div class="post-description">关于全景分割的文章阅读笔记。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="全景分割文章阅读"><a href="#全景分割文章阅读" class="headerlink" title="全景分割文章阅读"></a>全景分割文章阅读</h1><h2 id="Panopic-FPN"><a href="#Panopic-FPN" class="headerlink" title="Panopic FPN"></a>Panopic FPN</h2><p>Panoptic FPN-Panoptic Feature Pyramid Networks</p>
+<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p> <img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116102638957.png" alt="image-20210116102638957"><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116102658071.png" alt="image-20210116102658071"></p>
+<ul>
+<li><strong>Backbone</strong>：FPN，分辨率从1/4到1/32，通道数都为256。</li>
+<li><strong>Instance Segmentation Branch</strong>：Mask R-CNN</li>
+<li><strong>Semantic Segmentation Branch</strong>：如右图所示，对于FPN的每层输出，卷积+上采至1/4分辨率，然后相加，再上采4倍+卷积，得到和原始图像分辨率相同的$C$个通道的语义分割mask。$C$个通道除了stuff classes，还额外包括”other” class，它包含所有实例所在的像素，即将所有实例视为一个stuff class。</li>
+<li><strong>Panoptic Inference</strong>：对比上面两个分支产生的分割结果，要进行融合以得到全景分割的结果。这里用到了Panoptic segmentation(<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_CVPR_2019/papers/Kirillov_Panoptic_Segmentation_CVPR_2019_paper.pdf">https://openaccess.thecvf.com/content_CVPR_2019/papers/Kirillov_Panoptic_Segmentation_CVPR_2019_paper.pdf</a>) 提出的后处理办法：<ol>
+<li>resolving overlaps between different instances based on their confidence scores, </li>
+<li>resolving overlaps between instance and semantic segmenta- tionoutputsinfavorofinstances, and</li>
+<li>removinganystuff regions labeled ‘other’ or under a given area threshold.</li>
+</ol>
+</li>
+</ul>
+<h3 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h3><p>$L=\lambda _i(L_c+L_b+L_m)+\lambda _sL_s$<br>其中$L_c$为实例分割分支的分类损失，$L_b$为实例分割分支的bbox损失，$L_m$为实例分割分支的mask损失，$L_c,L_b$被RoI的数量归一化，$L_m$被前景RoI的数量归一化，$L_s$是语义分割分支的mask 损失，per-pixel cross entropy loss，被标注的像素数量归一化。</p>
+<h2 id="DR1MASK"><a href="#DR1MASK" class="headerlink" title="DR1MASK"></a>DR1MASK</h2><p>Unifying Instance and Panoptic Segmentation with Dynamic Rank-1 Convolutions</p>
+<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>提出了<strong>Dynamic Rank-1 Convolution</strong>，在增加少量计算量的条件下，提高了全景分割的性能。</p>
+<p>$Y=DR1Conv_{A,B}(X)=Conv(X\circ A)\circ B$</p>
+<h3 id="网络结构-1"><a href="#网络结构-1" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210115161633749.png" alt="image-20210115161633749"> </p>
+<ul>
+<li>${C_l,I_l }=Top(Tower(P_l)),l=3,4,…,7$，$C,I,P$有相同的空间分辨率，$C_l = [A_l,B_l]$，$I_l$是Instace Embeddings</li>
+<li>之后，$I_l$和与之对应的class labels和bboxes过NMS，得到一组${ e^{(i)}}$，它们仅包含Positive Proposals。</li>
+<li><strong>DR1Basis</strong>的输入为$P_l,C_l$，从上往下开始计算，$F_l=DR1Conv_{A_l,B_l}(Conv_{3\times 3}(P_l)+\uparrow_2(F_{l+1}))$，$F_8=0$，$\uparrow_2$代表上采样2倍，$A_l,B_l$是在channel维度上由$C_l$拆分而来的，$Conv_{3\times 3}$使$P_l$的channel数和$F_{l+1}$保持一致。在实际操作中，32通道已经足够好，对比<strong>Blendmask</strong>，它的通道数是128（4倍）。<strong>DR1Basis</strong>的输出为$F=F_1$。</li>
+<li><strong>crop-then-sgment</strong>：根据NMS得到的bbox，用RoIAlign在$F$中选取RoI $R^{(i)}\in \mathbb {R}^{D\times 56\times 56}$</li>
+<li><strong>Factored Attention</strong>：$e^{(i)}=[t^{(i)},s^{(i)}]$，$t^{(i)}$ reshape后得到$1\times 1$卷积核（$D_{in},K_{out}=4$）的参数，然后降维$R^{‘(i)}=t^{(i)}*R^{(i)}$</li>
+<li><strong>Panoptic Prediction</strong>：对$F$采用$1\times 1$卷积$f_{pano}$，输入通道为$D$，输出通道为$C=C_{stuff}+C_{thing}$。将卷积核$f_{pano}$参数分为两部分$W_{pano}=[W_{stuff},W_{thing}]$，$W_{stuff}(D\times C_{stuff})$是固定的参数，$C_{stuff}$是一常量，在COCO数据集中为53。$W_{thing}=[\overline{e}<em>1, \overline{e}<em>2,…, \overline {e} _{C _{thing}}]$，$\overline {e}_i$是这样得到的：对于instance $c$，预测出来有$N_c$个属于$c$的embedding ${e_n|n=1,2,…,N_c}$，对它们平均即可。最后，Panoptic Prediction $Y</em>{pano}=W</em>{pano}^TF$。</li>
+</ul>
+<h3 id="其他细节"><a href="#其他细节" class="headerlink" title="其他细节"></a>其他细节</h3><ol>
+<li>在FPN中，为了使特征图的长宽能够被stride整除，以便下采/上采后的尺寸一致，通常做法是在边缘进行padding，但是作者发现这样做会导致边缘处的分割不准确，因此作者调整了输入的divisibility 32 to 4，当上采后的尺寸不对应时，用crop的方式匹配尺寸。</li>
+<li>为了得到一种高效的attention representation，作者首先将$4\times 14\times 14$的attention $Q$沿着第一个维度分解${Q_k|k=1,..,4 }$，然后$Q_k\in \mathbb {R}^{14\times 14}$分解为$Q_k^{(i)}=U^T_k\sum ^{(i)}<em>k V_k$，其中$\sum _k^{(i)} \in \mathbb R^{4\times 4}$是对角阵，它的参数来自于$s^{(i)}$，$U_k,V_k$是共享的参数，外积$u^T</em>{kd}v_{kd}$可以看作是$Q_k$的一个分量，下标$d$代表第$d$行。</li>
+</ol>
+<h2 id="Max-DeepLab"><a href="#Max-DeepLab" class="headerlink" title="Max-DeepLab"></a>Max-DeepLab</h2><p>MaX-DeepLab: End-to-End Panoptic Segmentation with Mask Transformers</p>
+<h3 id="网络结构-2"><a href="#网络结构-2" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/image-20210116115931707.png" alt="image-20210116115931707"></p>
+<ul>
+<li><strong>P2M Attention</strong>：输入为2D feature $x^p\in \mathbb {R}^{\hat H\times \hat W \times d_{in}}$和1D global memory feature $x^m\in \mathbb {R}^{N\times D_{in}}$，$N$为predition set的长度，对于2D feature的每个像素位置，用线性映射得到$q^p,k^p,v^p$，类似地，得到$q^m,k^m,v^m$。之后，对于每个像素位置$a$，P2M计算如下：$y_a^p=\sum ^N_{n=1}softmax_n(q_a^p\cdot k_n^m)v^m_n$，query和key是长为$d_q$的向量，value是长为$d_v$的向量，$softmax_n$是memory length $N$维度上的。</li>
+<li><strong>M2P &amp; M2M Attention</strong>：$y_b^m=\sum _{n=1}^{\hat H\hat W +N}softmax_n(q^m_b\cdot k^{pm}_n)v^{pm}_n$，下标$b$代表memory position，$k^{pm}=[k^p,k^m]^T, v^{pm}=[v^p, v^m]^T$。</li>
+<li><strong>Output Heads</strong>：class分支，输入为memory feature，经过2个FC层，得到predict classes $\hat p(c)\in \mathbb {R}^{N \times |C|}$；mask分支，meory feature经过2个FC层，得到mask feature $f\in \mathbb {R}^{N\times D}$，pixel feature2个卷积层，得到normalized feature $g\in \mathbb {R}^{D\times \frac {H}{4}\times \frac {W}{4}}$，然后得到mask prediction $\hat m=softmax_N(f\cdot g)\in \mathbb {R}^{N\times \frac {H}{4}\times \frac {W}{4}}$。此外，batch norm被应用于$f$和$(f\cdot g)$，$\hat m$被双线性上采样至原始分辨率。</li>
+</ul>
+<h3 id="Loss-1"><a href="#Loss-1" class="headerlink" title="Loss"></a>Loss</h3><h4 id="PQ-style-loss"><a href="#PQ-style-loss" class="headerlink" title="PQ-style loss"></a>PQ-style loss</h4><p>首先定义相似度：<img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss.PNG" alt="PQLoss"> </p>
+<p>其中，$y_i=(m_i,c_i)$是GT，$\hat y_j=(\hat m_j,\hat p_j(c))$是预测结果。然后进行基于二分图匹配的one-to-one mask matching：<br> <img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/BM.PNG" alt="BM"></p>
+<p>其中，$\hat \sigma$是$N$个预测的一种排列，GT有$K$个，那么有对应的$K$个预测与之匹配，剩下的$N-K$个masks被视为负类，类别标签应该预测为$\phi$。<br>所以，PQ-style loss被定义为：<img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss2.PNG" alt="PQLoss2"><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss3.PNG" alt="PQLoss3"> </p>
+<p> <img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/PQLoss4.PNG" alt="PQLoss4"></p>
+<h4 id="Instance-Discimination"><a href="#Instance-Discimination" class="headerlink" title="Instance Discimination"></a>Instance Discimination</h4><p>首先，它为每个Instance计算一个对应的embedding：</p>
+<p><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/ID.PNG" alt="ID"> </p>
+<p>$g\in \mathbb {R}^{D\times \frac {H}{4}\times \frac {W}{4}}$是预测的feature map，$m_i \in {0,1 }^{\frac {H}{4}\times \frac {W}{4}}$是降采后的GT，$t_{i,:} \in \mathbb {R}^D$是正则化后的embedding，它相当于用GT去fiter feature map，然后逐像素的将channel这个维度相加，再正则化。之后，定义constrasive loss：<br><img src="/2021/01/16/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/CL.PNG" alt="CL"></p>
+<p>该Loss鼓励feature map $g$上的每个pixel识别自己属于哪个embedding，也就是说，属于同一个instance的pixel feature$\in \mathbb R^D$要尽可能的相似，反之尽可能的不相似，因为相似的话，$exp(\cdot)$括号里的这一项就会在instance对应的下标$i$下较大，整个$log$后面这一项也会较大，loss就会较小。</p>
+<h4 id="Mask-ID-cross-entropy"><a href="#Mask-ID-cross-entropy" class="headerlink" title="Mask-ID cross entropy"></a>Mask-ID cross entropy</h4><p>对于预测mask的每个pixel，应用cross-entropy loss。</p>
+<h4 id="Semantic-segmentation"><a href="#Semantic-segmentation" class="headerlink" title="Semantic segmentation"></a>Semantic segmentation</h4><p>在第一个decoder的输出(stride 4)后面接一个semantic head，然后计算semantic segmentation loss，作者说这样做有助于提高性能。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2/" rel="tag"># 全景分割</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/16/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/" rel="prev" title="图片测试">
+      <i class="fa fa-chevron-left"></i> 图片测试
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E6%99%AF%E5%88%86%E5%89%B2%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB"><span class="nav-number">1.</span> <span class="nav-text">全景分割文章阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Panopic-FPN"><span class="nav-number">1.1.</span> <span class="nav-text">Panopic FPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loss"><span class="nav-number">1.1.2.</span> <span class="nav-text">Loss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DR1MASK"><span class="nav-number">1.2.</span> <span class="nav-text">DR1MASK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82"><span class="nav-number">1.2.3.</span> <span class="nav-text">其他细节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Max-DeepLab"><span class="nav-number">1.3.</span> <span class="nav-text">Max-DeepLab</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loss-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PQ-style-loss"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">PQ-style loss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Instance-Discimination"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">Instance Discimination</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mask-ID-cross-entropy"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">Mask-ID cross entropy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semantic-segmentation"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">Semantic segmentation</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
